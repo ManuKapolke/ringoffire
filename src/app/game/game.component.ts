@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent {
+  cardIsPicked: boolean = false;
 
+  takeCard() {
+    this.cardIsPicked = true;
+  }
 }
