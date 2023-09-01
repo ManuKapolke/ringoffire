@@ -7,7 +7,7 @@ import { Game } from 'src/models/game';
   styleUrls: ['./game.component.scss']
 })
 export class GameComponent implements OnInit {
-  game: Game = new Game();
+  game: Game;
   currentCard: string = '';
   cardIsPicked: boolean = false;
 
@@ -16,7 +16,7 @@ export class GameComponent implements OnInit {
   }
 
   initGame() {
-    // this.game = new Game();
+    this.game = new Game();
     console.log(this.game);
   }
 

@@ -14,3 +14,6 @@
             src="../../assets/img/cards/{{ currentCard }}.png">
     </div>
 </div>
+
+<app-player *ngFor="let player of game.players; let i = index" [ngStyle]="{'top.px': 100 + i * 120}" [name]="player"
+    class="player-position"></app-player>
