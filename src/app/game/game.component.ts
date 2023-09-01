@@ -8,7 +8,7 @@ import { Game } from 'src/models/game';
 })
 export class GameComponent implements OnInit {
   game: Game = new Game();
-  currentCard: string | undefined = '';
+  currentCard: string = '';
   cardIsPicked: boolean = false;
 
   ngOnInit() {
@@ -21,14 +21,14 @@ export class GameComponent implements OnInit {
   }
 
   takeCard() {
-    if (this.cardIsPicked) return;
-
-    this.currentCard = this.game.stack.pop();
+    if (this.cardIsPicked || this.game.stack.length === 0) return;
+    this.currentCard = this.game.stack.pop()!;
     console.log(this.currentCard)
     this.cardIsPicked = true;
 
     setTimeout(() => {
+      this.game.playedCards.push(this.currentCard);
       this.cardIsPicked = false;
-    }, 1500);
+    }, 1000);
   }
 }
