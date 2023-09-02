@@ -26,8 +26,8 @@ export class GameComponent implements OnInit {
 
   takeCard() {
     if (this.cardIsPicked || this.game.stack.length === 0) return;
+
     this.currentCard = this.game.stack.pop()!;
-    console.log(this.currentCard)
     this.cardIsPicked = true;
 
     setTimeout(() => {
