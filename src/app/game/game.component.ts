@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { Game } from 'src/models/game';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
+import { Firestore, collection, collectionData, doc } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-game',
@@ -13,10 +14,35 @@ export class GameComponent implements OnInit {
   currentCard: string = '';
   cardIsPicked: boolean = false;
 
+  games$;
+  games;
+
+  firestore: Firestore = inject(Firestore);
+
   constructor(public dialog: MatDialog) { }
 
   ngOnInit() {
     this.initGame();
+
+    // this.getGamesRef().valueChanges().subscribe((game) => {
+    //   console.log('Updated game:', game);
+    // });
+
+
+    this.games$ = collectionData(this.getGamesRef());
+    this.games = this.games$.subscribe(list => {
+      list.forEach(game => {
+        console.log('Updated game:', game);
+      });
+    });
+  }
+
+  getGamesRef() {
+    return collection(this.firestore, 'games');
+  }
+
+  getSingleGameRef(gameId: string) {
+    return doc(this.getGamesRef(), gameId);
   }
 
   initGame() {
