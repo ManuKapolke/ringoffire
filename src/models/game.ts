@@ -1,5 +1,5 @@
 export class Game {
-    public players: string[] = ['Manu', 'Nadine', 'Melia', 'Maro'];
+    public players: string[] = [];
     public stack: string[] = [];
     public playedCards: string[] = [];
     public currentPlayer: number = 0;
@@ -22,6 +22,13 @@ export class Game {
             playedCards: this.playedCards,
             currentPlayer: this.currentPlayer
         };
+    }
+
+    public updateFromJson(json: any): void {
+        this.players = json.players ? json.players : this.players;
+        this.stack = json.stack ? json.stack : this.stack;
+        this.playedCards = json.playedCards ? json.playedCards : this.playedCards;
+        this.currentPlayer = json.currentPlayer ? json.currentPlayer : this.currentPlayer;
     }
 }
 

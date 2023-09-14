@@ -34,10 +34,12 @@ export class GameComponent implements OnInit {
     this.route.params.subscribe(params => {
       console.log('Game ID from route.params:', params['gameId']);
       this.gameId = params['gameId'];
+
+      // this.unsubGames = this.subscribeGames();
+      this.unsubSingleGame = this.subscribeSingleGame(this.gameId);
+
     });
 
-    // this.unsubGames = this.subscribeGames();
-    this.unsubSingleGame = this.subscribeSingleGame(this.gameId);
 
     // this.games$ = collectionData(this.getGamesRef());
     // this.games = this.games$.subscribe(list => {
@@ -52,25 +54,28 @@ export class GameComponent implements OnInit {
     this.unsubSingleGame();
   }
 
-  subscribeGames() {
-    return onSnapshot(this.getGamesRef(), games => {
-      games.docChanges().forEach((change) => {
-        if (change.type === "added") {
-          console.log("New game: ", change.doc.data());
-        }
-        if (change.type === "modified") {
-          console.log("Modified game: ", change.doc.data());
-        }
-        if (change.type === "removed") {
-          console.log("Removed game: ", change.doc.data());
-        }
-      });
-    });
-  }
+  // subscribeGames() {
+  //   return onSnapshot(this.getGamesRef(), games => {
+  //     games.docChanges().forEach((change) => {
+  //       if (change.type === "added") {
+  //         console.log("New game: ", change.doc.data());
+  //       }
+  //       if (change.type === "modified") {
+  //         console.log("Modified game: ", change.doc.data());
+  //       }
+  //       if (change.type === "removed") {
+  //         console.log("Removed game: ", change.doc.data());
+  //       }
+  //     });
+  //   });
+  // }
+
 
   subscribeSingleGame(gameId: string) {
-    return onSnapshot(this.getSingleGameRef(gameId), game => {
-      console.log('Game update', game.data());
+    return onSnapshot(this.getSingleGameRef(gameId), (docRef: any) => {
+      // console.log('Game update', docRef.data());
+      this.game.updateFromJson(docRef.data());
+      console.log('Update:', this.game);
     });
   }
 
