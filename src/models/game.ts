@@ -3,6 +3,8 @@ export class Game {
     public stack: string[] = [];
     public playedCards: string[] = [];
     public currentPlayer: number = 0;
+    public currentCard: string = '';
+    public cardIsPicked: boolean = false;
 
     constructor() {
         for (let i = 1; i < 14; i++) {
@@ -20,7 +22,9 @@ export class Game {
             players: this.players,
             stack: this.stack,
             playedCards: this.playedCards,
-            currentPlayer: this.currentPlayer
+            currentPlayer: this.currentPlayer,
+            currentCard: this.currentCard,
+            cardIsPicked: this.cardIsPicked
         };
     }
 
@@ -29,6 +33,8 @@ export class Game {
         this.stack = json.stack ? json.stack : this.stack;
         this.playedCards = json.playedCards ? json.playedCards : this.playedCards;
         this.currentPlayer = json.currentPlayer ? json.currentPlayer : this.currentPlayer;
+        this.currentCard = json.currentCard ? json.currentCard : this.currentCard;
+        this.cardIsPicked = json.cardIsPicked ? json.cardIsPicked : this.cardIsPicked;
     }
 }
 

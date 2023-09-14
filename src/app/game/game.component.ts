@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Game } from 'src/models/game';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
-import { Firestore, addDoc, collection, collectionData, doc, onSnapshot } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, collectionData, doc, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -13,8 +13,6 @@ import { ActivatedRoute } from '@angular/router';
 export class GameComponent implements OnInit {
   game: Game;
   gameId: string;
-  currentCard: string = '';
-  cardIsPicked: boolean = false;
 
   // games$;
   // games;
@@ -91,17 +89,25 @@ export class GameComponent implements OnInit {
     this.game = new Game();
   }
 
-  takeCard() {
-    if (this.cardIsPicked || this.game.stack.length === 0) return;
+  async updateGame() {
+    await updateDoc(this.getSingleGameRef(this.gameId), this.game.toJson()).catch(
+      err => console.error(err)
+    );
+  }
 
-    this.currentCard = this.game.stack.pop()!;
-    this.cardIsPicked = true;
+  takeCard() {
+    if (this.game.cardIsPicked || this.game.stack.length === 0) return;
+
+    this.game.currentCard = this.game.stack.pop()!;
+    this.game.cardIsPicked = true;
+    this.game.currentPlayer++;
+    this.game.currentPlayer %= this.game.players.length;
+    this.updateGame();
 
     setTimeout(() => {
-      this.game.playedCards.push(this.currentCard);
-      this.cardIsPicked = false;
-      this.game.currentPlayer++;
-      this.game.currentPlayer %= this.game.players.length;
+      this.game.playedCards.push(this.game.currentCard);
+      this.game.cardIsPicked = false;
+      this.updateGame();
     }, 500);
   }
 
@@ -111,6 +117,7 @@ export class GameComponent implements OnInit {
     dialogRef.afterClosed().subscribe(name => {
       if (name) {
         this.game.players.push(name);
+        this.updateGame();
       }
     });
   }
