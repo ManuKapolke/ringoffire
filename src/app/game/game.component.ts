@@ -2,7 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Game } from 'src/models/game';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
-import { Firestore, addDoc, collection, collectionData, doc } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, collectionData, doc, onSnapshot } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -12,11 +12,14 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class GameComponent implements OnInit {
   game: Game;
+  gameId: string;
   currentCard: string = '';
   cardIsPicked: boolean = false;
 
-  games$;
-  games;
+  // games$;
+  // games;
+  unsubGames;
+  unsubSingleGame;
 
   firestore: Firestore = inject(Firestore);
 
@@ -30,16 +33,44 @@ export class GameComponent implements OnInit {
 
     this.route.params.subscribe(params => {
       console.log('Game ID from route.params:', params['gameId']);
+      this.gameId = params['gameId'];
     });
 
-    // this.getGamesRef().valueChanges().subscribe((game) => {
-    //   console.log('Updated game:', game);
+    // this.unsubGames = this.subscribeGames();
+    this.unsubSingleGame = this.subscribeSingleGame(this.gameId);
+
+    // this.games$ = collectionData(this.getGamesRef());
+    // this.games = this.games$.subscribe(list => {
+    //   list.forEach(game => {
+    //     console.log('Game update', game);
+    //   });
     // });
-    this.games$ = collectionData(this.getGamesRef());
-    this.games = this.games$.subscribe(list => {
-      list.forEach(game => {
-        console.log('Game update', game);
+  }
+
+  ngOnDestroy() {
+    this.unsubGames();
+    this.unsubSingleGame();
+  }
+
+  subscribeGames() {
+    return onSnapshot(this.getGamesRef(), games => {
+      games.docChanges().forEach((change) => {
+        if (change.type === "added") {
+          console.log("New game: ", change.doc.data());
+        }
+        if (change.type === "modified") {
+          console.log("Modified game: ", change.doc.data());
+        }
+        if (change.type === "removed") {
+          console.log("Removed game: ", change.doc.data());
+        }
       });
+    });
+  }
+
+  subscribeSingleGame(gameId: string) {
+    return onSnapshot(this.getSingleGameRef(gameId), game => {
+      console.log('Game update', game.data());
     });
   }
 
@@ -54,7 +85,7 @@ export class GameComponent implements OnInit {
   async newGame() {
     this.game = new Game();
 
-    // let gameInfo = await addDoc(this.getGamesRef(), { game: this.game.toJson() })
+    // let gameInfo = await addDoc(this.getGamesRef(), this.game.toJson())
     // // .catch(
     // //   err => console.error(err)
     // // ).then(
