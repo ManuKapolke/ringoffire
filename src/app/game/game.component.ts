@@ -32,7 +32,7 @@ export class GameComponent implements OnInit {
     this.newGame();
 
     this.route.params.subscribe(params => {
-      console.log('Game ID from route.params:', params['gameId']);
+      // console.log('Game ID from route.params:', params['gameId']);
       this.gameId = params['gameId'];
 
       // this.unsubGames = this.subscribeGames();
@@ -89,15 +89,6 @@ export class GameComponent implements OnInit {
 
   async newGame() {
     this.game = new Game();
-
-    // let gameInfo = await addDoc(this.getGamesRef(), this.game.toJson())
-    // // .catch(
-    // //   err => console.error(err)
-    // // ).then(
-    // //   docRef => { console.log('Game document written with ID: ', docRef?.id) }
-    // //   // () => console.log('New game document written.')
-    // // );
-    // console.log('New game document written with ID: ', gameInfo.id);
   }
 
   takeCard() {
