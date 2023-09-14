@@ -2,7 +2,8 @@ import { Component, OnInit, inject } from '@angular/core';
 import { Game } from 'src/models/game';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
-import { Firestore, collection, collectionData, doc } from '@angular/fire/firestore';
+import { Firestore, addDoc, collection, collectionData, doc } from '@angular/fire/firestore';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-game',
@@ -19,20 +20,25 @@ export class GameComponent implements OnInit {
 
   firestore: Firestore = inject(Firestore);
 
-  constructor(public dialog: MatDialog) { }
+  constructor(
+    private route: ActivatedRoute,
+    public dialog: MatDialog
+  ) { }
 
   ngOnInit() {
-    this.initGame();
+    this.newGame();
+
+    this.route.params.subscribe(params => {
+      console.log('Game ID from route.params:', params['gameId']);
+    });
 
     // this.getGamesRef().valueChanges().subscribe((game) => {
     //   console.log('Updated game:', game);
     // });
-
-
     this.games$ = collectionData(this.getGamesRef());
     this.games = this.games$.subscribe(list => {
       list.forEach(game => {
-        console.log('Updated game:', game);
+        console.log('Game update', game);
       });
     });
   }
@@ -45,9 +51,17 @@ export class GameComponent implements OnInit {
     return doc(this.getGamesRef(), gameId);
   }
 
-  initGame() {
+  async newGame() {
     this.game = new Game();
-    console.log(this.game);
+
+    // let gameInfo = await addDoc(this.getGamesRef(), { game: this.game.toJson() })
+    // // .catch(
+    // //   err => console.error(err)
+    // // ).then(
+    // //   docRef => { console.log('Game document written with ID: ', docRef?.id) }
+    // //   // () => console.log('New game document written.')
+    // // );
+    // console.log('New game document written with ID: ', gameInfo.id);
   }
 
   takeCard() {
