@@ -29,12 +29,12 @@ export class Game {
     }
 
     public updateFromJson(json: any): void {
-        this.players = json.players ? json.players : this.players;
-        this.stack = json.stack ? json.stack : this.stack;
-        this.playedCards = json.playedCards ? json.playedCards : this.playedCards;
-        this.currentPlayer = json.currentPlayer ? json.currentPlayer : this.currentPlayer;
-        this.currentCard = json.currentCard ? json.currentCard : this.currentCard;
-        this.cardIsPicked = json.cardIsPicked ? json.cardIsPicked : this.cardIsPicked;
+        this.players = 'players' in json ? json.players : this.players;
+        this.stack = 'stack' in json ? json.stack : this.stack;
+        this.playedCards = 'playedCards' in json ? json.playedCards : this.playedCards;
+        this.currentPlayer = 'currentPlayer' in json ? json.currentPlayer : this.currentPlayer;
+        this.currentCard = 'currentCard' in json ? json.currentCard : this.currentCard;
+        this.cardIsPicked = 'cardIsPicked' in json ? json.cardIsPicked : this.cardIsPicked;
     }
 }
 

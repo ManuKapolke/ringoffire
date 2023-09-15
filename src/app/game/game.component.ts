@@ -95,19 +95,19 @@ export class GameComponent implements OnInit {
     );
   }
 
-  takeCard() {
+  async takeCard() {
     if (this.game.cardIsPicked || this.game.stack.length === 0) return;
 
     this.game.currentCard = this.game.stack.pop()!;
     this.game.cardIsPicked = true;
     this.game.currentPlayer++;
     this.game.currentPlayer %= this.game.players.length;
-    this.updateGame();
+    await this.updateGame();
 
-    setTimeout(() => {
+    setTimeout(async () => {
       this.game.playedCards.push(this.game.currentCard);
       this.game.cardIsPicked = false;
-      this.updateGame();
+      await this.updateGame();
     }, 500);
   }
 
