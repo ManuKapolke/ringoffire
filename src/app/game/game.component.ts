@@ -4,6 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { DialogAddPlayerComponent } from '../dialog-add-player/dialog-add-player.component';
 import { Firestore, addDoc, collection, collectionData, doc, onSnapshot, updateDoc } from '@angular/fire/firestore';
 import { ActivatedRoute } from '@angular/router';
+import { EditPlayerComponent } from '../edit-player/edit-player.component';
 
 @Component({
   selector: 'app-game',
@@ -117,6 +118,24 @@ export class GameComponent implements OnInit {
     dialogRef.afterClosed().subscribe(name => {
       if (name) {
         this.game.players.push(name);
+        this.game.playerImages.push('1.webp');
+        this.updateGame();
+      }
+    });
+  }
+
+  editPlayer(playerId: number) {
+    const dialogRef = this.dialog.open(EditPlayerComponent);
+
+    dialogRef.afterClosed().subscribe((change: string) => {
+      if (change) {
+        if (change === 'DELETE') {
+          this.game.players.splice(playerId, 1);
+          this.game.playerImages.splice(playerId, 1);
+        } else {
+          console.log('Received change', change);
+          this.game.playerImages[playerId] = change;
+        }
         this.updateGame();
       }
     });

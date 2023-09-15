@@ -1,5 +1,6 @@
 export class Game {
     public players: string[] = [];
+    public playerImages: string[] = [];
     public stack: string[] = [];
     public playedCards: string[] = [];
     public currentPlayer: number = 0;
@@ -20,6 +21,7 @@ export class Game {
     public toJson() {
         return {
             players: this.players,
+            playerImages: this.playerImages,
             stack: this.stack,
             playedCards: this.playedCards,
             currentPlayer: this.currentPlayer,
@@ -30,6 +32,7 @@ export class Game {
 
     public updateFromJson(json: any): void {
         this.players = 'players' in json ? json.players : this.players;
+        this.playerImages = 'playerImages' in json ? json.playerImages : this.playerImages;
         this.stack = 'stack' in json ? json.stack : this.stack;
         this.playedCards = 'playedCards' in json ? json.playedCards : this.playedCards;
         this.currentPlayer = 'currentPlayer' in json ? json.currentPlayer : this.currentPlayer;
