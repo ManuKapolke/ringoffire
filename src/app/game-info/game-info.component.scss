@@ -1,0 +1,9 @@
+mat-card {
+    padding: 8px;
+
+    @media (max-width: 720px) {
+        min-height: 120px;
+        border-radius: unset;
+        padding-right: 96px;
+    }
+}
