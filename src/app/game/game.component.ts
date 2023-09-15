@@ -15,6 +15,8 @@ export class GameComponent implements OnInit {
   game: Game;
   gameId: string;
 
+  gameIsOver: boolean = false;
+
   // games$;
   // games;
   unsubGames;
@@ -97,7 +99,12 @@ export class GameComponent implements OnInit {
   }
 
   async takeCard() {
-    if (this.game.cardIsPicked || this.game.stack.length === 0) return;
+    if (this.game.cardIsPicked) return;
+
+    if (this.game.stack.length === 0) {
+      this.gameIsOver = true;
+      return;
+    }
 
     this.game.currentCard = this.game.stack.pop()!;
     this.game.cardIsPicked = true;

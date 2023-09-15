@@ -102,3 +102,38 @@
         overflow-y: hidden;
     }
 }
+
+.game-over {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fdfdfd;
+
+    img {
+        max-width: 100vw;
+        height: 100%;
+        animation: fadeIn 500ms ease-in-out;
+    }
+
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        scale: 0.5;
+    }
+
+    to {
+        opacity: 1;
+        scale: 1;
+    }
+}
+
+.preload-image {
+    height: 0;
+    width: 0;
+    opacity: 0;
+    z-index: -9999999;
+    position: absolute;
+}
