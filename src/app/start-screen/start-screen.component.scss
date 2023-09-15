@@ -6,6 +6,7 @@
     justify-content: center;
     align-items: center;
     background-color: #404040;
+    overflow: hidden;
 
     img {
         max-height: 100vh;
@@ -21,12 +22,18 @@
     justify-content: center;
 
     img {
-        width: 40vw;
+        width: 30vw;
+        max-width: 500px;
         height: auto;
 
         &:hover {
             filter: brightness(1.25);
             cursor: pointer;
         }
+
+        @media (max-width: 960px) {
+            width: 290px;
+        }
     }
+
 }
